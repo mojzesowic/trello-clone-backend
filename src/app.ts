@@ -42,7 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/v1', auth, loggedIn, v1Router);
 app.get('/login', (req, res, next) => passport.authenticate('basic', (err, user) => {
     if (!err && user) {
-        res.json({ token: user.generateJwt() });
+        return res.json({ token: user.generateJwt() });
     }
 
     res.sendStatus(401);

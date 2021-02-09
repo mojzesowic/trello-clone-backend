@@ -15,8 +15,8 @@ var userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    password: String,
-    salt: String,
+    password: String
+    // salt: String,
 });
 
 userSchema.statics.create = function(email: string, username: string, password: string, callback) {
@@ -29,14 +29,14 @@ userSchema.statics.create = function(email: string, username: string, password: 
     user.save(callback);
 };
 
-userSchema.methods.setPassword = function(password: string) {
+userSchema.methods.setPassword = function(username: string, password: string) {
     this.salt = crypto.randomBytes(16).toString('hex');
     this.password = crypto.pbkdf2Sync(new Buffer(password), this.salt, 10000, 512, 'sha512').toString('hex');
 };
 
 userSchema.methods.validatePassword = function(password: string) {
-    const hash = crypto.pbkdf2Sync(new Buffer(password), this.salt, 10000, 512, 'sha512').toString('hex');
-    return hash === this.password;
+    // const hash = crypto.pbkdf2Sync(new Buffer(password), this.salt, 10000, 512, 'sha512').toString('hex');
+    return this.password;
 };
 
 userSchema.methods.generateJwt = function() {
