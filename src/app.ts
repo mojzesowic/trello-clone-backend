@@ -24,7 +24,7 @@ if (app.get('env') === 'development') {
     app.use((req, res, next) => {
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-        res.header('Access-Control-Allow-Credentials', 'true');
+        res.header('Access-Control-Allow-Credentials', 'false');
         res.header('Access-Control-Expose-Headers', 'set-cookie');
         next();
     });
@@ -39,7 +39,7 @@ app.use(passport.initialize());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/api/v1', auth, loggedIn, v1Router);
+app.use('/api/v1', loggedIn, v1Router);
 app.get('/login', (req, res, next) => passport.authenticate('basic', (err, user) => {
     if (!err && user) {
         return res.json({ token: user.generateJwt() });
